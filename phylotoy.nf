@@ -26,37 +26,41 @@
  */
 
 
-params.file_names="$baseDir/data/prestin_SLC26A5.35eutheria.original.msa"
+params.in_dir="$baseDir/data/*"
 params.out_dir="."
 
-params.rand_value=9
-params.tag_name="PRESTIN"
 
-file_names=Channel.fromPath(params.file_names)
+Channel
+	.fromPath(params.in_dir)
+	.ifEmpty { error "Cannot find any data -- Check the path specified: `${params.in_dir}`" }
+        .set { file_names }
+
+
 
 process align{
   publishDir params.out_dir, mode: "copy"
 
   input:
-      set file(seq_file) from file_names
+      file(seq_file) from file_names
   output:
-      file(seq_file.aln) into msas 
+      file "${seq_file}.aln" into msas 
   
   """
-      clustalo -i $seq_file -o $seq_file.aln
+      t_coffee -in $seq_file -outfile ${seq_file}.aln -output phy
   """
 }
+
 
 process get_raxml_tree{
   publishDir params.out_dir, mode: "copy"
 
   input:
-      set file(msa_file) from msas
+      file(msa_file) from msas
   output:
       file "RAxML_bestTree*" into trees
   
   """
-      raxmlHPC -T 2 -f d -j -p $params.rand_value -m PROTGAMMALG -s $msa_file -n $params.tag_name 
+      raxmlHPC -f d -j -p 9 -m PROTGAMMALG -s $msa_file -n ${msa_file}.TREE 
   """
 }
 
