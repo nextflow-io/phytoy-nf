@@ -46,16 +46,29 @@ process align{
       file "${seq_file}.aln" into msas 
   
   """
-      t_coffee -in $seq_file -outfile ${seq_file}.aln -output phy
+      t_coffee -in $seq_file -outfile ${seq_file}.aln
   """
 }
 
+
+process align_msas{
+  publishDir params.out_dir, mode: "copy"
+
+  input:
+      file(seq_file) from msas.collectFile().toList()
+  output:
+      file res_aln into big_msa
+
+  """
+      t_coffee -profile $seq_file -outfile res_aln -output phy
+  """
+}
 
 process get_raxml_tree{
   publishDir params.out_dir, mode: "copy"
 
   input:
-      file(msa_file) from msas
+      file(msa_file) from big_msa
   output:
       file "RAxML_bestTree*" into trees
   
