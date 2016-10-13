@@ -25,12 +25,11 @@ Usage
     
 You can run phytoy-NF using the following command: 
 
-- Natively:
+-Natively:
 
 	nextflow run phytoy [phytoy-nf command line options]
     
-
-- With Docker:
+-With Docker:
 	
 	nextflow run phytoy -with-docker [phytoy-nf command line options]
     
