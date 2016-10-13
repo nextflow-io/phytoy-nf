@@ -15,7 +15,7 @@ To run phytoy-NF you need to install nextflow, by simply checking if you have Ja
 
 	curl -fsSL get.nextflow.io | bash
 
-If you want to replicate exactly the pipeline and/or not install all the dependencies shootstrap-NF has, then you also need to install Docker and run phytoy-NF with the '-with-docker' flag, as demonstrated below. Otherwise all the dependencies of phytoy-NF have to be installed and put in the PATH.
+If you want to replicate exactly the pipeline and/or not install all the dependencies phytoy-NF has, then you also need to install Docker and run phytoy-NF with the '-with-docker' flag, as demonstrated below. Otherwise all the dependencies of phytoy-NF have to be installed and put in the PATH.
 
 Install Docker on your computer. Read more here https://docs.docker.com
 
