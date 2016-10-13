@@ -27,18 +27,19 @@ You can run phytoy-NF using the following command:
 
 - Natively:
 
-    nextflow run phytoy [phytoy-nf command line options]
+	nextflow run phytoy [phytoy-nf command line options]
+    
 
 - With Docker:
-
-    nextflow run phytoy -with-docker [phytoy-nf command line options]
+	
+	nextflow run phytoy -with-docker [phytoy-nf command line options]
     
 
 For example: 
 
-     nextflow run phytoy -with-docker
+	nextflow run phytoy -with-docker
 
-This command will run (by automatically cloning the respository in your workstation, due to the [Nextflow integration with github](http://www.nextflow.io/docs/latest/sharing.html)) the analysis for the "hip.fa" and "seatoxin.fa" example-datasets contained in the data/ directory, and will generate an multiple sequence alignmnet and a phylogenetic tree for each dataset.
+This command will run (by automatically cloning the respository in your workstation, due to the [Nextflow integration with github](http://www.nextflow.io/docs/latest/sharing.html)) the analysis for the "hip.fa" and "seatoxin.fa" example-datasets contained in the data/ directory, and will generate a multiple sequence alignmnet and a phylogenetic tree for each dataset.
 
 
 Command line options:
