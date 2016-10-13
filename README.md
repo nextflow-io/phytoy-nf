@@ -23,13 +23,13 @@ Install Docker on your computer. Read more here https://docs.docker.com
 Usage
 -----------
     
-You can run phytoy-NF using the following command: 
+You can run phytoy-NF, 
 
--Natively:
+   natively using the following command:
 
 	nextflow run phytoy [phytoy-nf command line options]
     
--With Docker:
+   with Docker using the following commands:
 	
 	nextflow run phytoy -with-docker [phytoy-nf command line options]
     
