@@ -26,19 +26,19 @@
  */
 
 
-params.in_dir="$baseDir/data/*"
-params.out_dir="."
+params.in = "$baseDir/data/*"
+params.out = 'results'
 
 
 Channel
-	.fromPath(params.in_dir)
-	.ifEmpty { error "Cannot find any data -- Check the path specified: `${params.in_dir}`" }
+	.fromPath(params.in)
+	.ifEmpty { error "Cannot find any data -- Check the path specified: `${params.in}`" }
         .set { file_names }
 
 
 
 process align{
-  publishDir params.out_dir, mode: "copy"
+  publishDir params.out
 
   input:
       file(seq_file) from file_names
@@ -52,27 +52,27 @@ process align{
 
 
 process align_msas{
-  publishDir params.out_dir, mode: "copy"
+  publishDir params.out
 
   input:
-      file(seq_file) from msas.collectFile().toList()
+      file 'seq*.fa' from msas.toList()
   output:
       file res_aln into big_msa
 
   """
-      t_coffee -profile $seq_file -outfile res_aln -output phy
+      t_coffee -profile seq*.fa -outfile res_aln -output phy
   """
 }
 
 process get_raxml_tree{
-  publishDir params.out_dir, mode: "copy"
+  publishDir params.out
 
   input:
       file(msa_file) from big_msa
   output:
-      file "RAxML_bestTree*" into trees
+      file "RAxML_bestTree.*" into trees
   
   """
-      raxmlHPC -f d -j -p 9 -m PROTGAMMALG -s $msa_file -n ${msa_file}.TREE 
+      raxmlHPC -f d -j -p 9 -m PROTGAMMALG -s $msa_file -n ${msa_file} 
   """
 }
