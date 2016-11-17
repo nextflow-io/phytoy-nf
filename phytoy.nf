@@ -23,56 +23,49 @@
  *
  * @authors
  * Maria Chatzou <mxatzou@gmail.com>
+ * Paolo Di Tommaso <paolo.ditommaso@gmail.com>
  */
 
 
-params.in = "$baseDir/data/*"
+params.in = "$baseDir/data/*.tfa"
 params.out = 'results'
 
 
 Channel
-	.fromPath(params.in)
-	.ifEmpty { error "Cannot find any data -- Check the path specified: `${params.in}`" }
-        .set { file_names }
+    .fromPath(params.in)
+    .ifEmpty { error "Cannot find any data -- Check the path specified: `${params.in}`" }
+    .set { seq_files }
 
 
 
-process align{
-  publishDir params.out
+process align {
 
   input:
-      file(seq_file) from file_names
+      file(seq) from seq_files
   output:
-      file "${seq_file}.aln" into msas 
+      file("*.phy") into msa_files 
   
   """
-      t_coffee -in $seq_file -outfile ${seq_file}.aln
+      clustalw -infile=$seq -output=phylip -outfile=${seq.baseName}.phy
   """
 }
 
 
-process align_msas{
-  publishDir params.out
-
-  input:
-      file 'seq*.fa' from msas.toList()
-  output:
-      file res_aln into big_msa
-
-  """
-      t_coffee -profile seq*.fa -outfile res_aln -output phy
-  """
-}
 
 process get_raxml_tree{
-  publishDir params.out
-
+  publishDir params.out, mode: 'copy'
+  cpus 2 
+  
   input:
-      file(msa_file) from big_msa
+      file(msa) from msa_files
   output:
       file "RAxML_bestTree.*" into trees
   
   """
-      raxmlHPC -f d -j -p 9 -m PROTGAMMALG -s $msa_file -n ${msa_file} 
+      raxmlHPC -f d -j -p 9 -T ${task.cpus} -m PROTGAMMALG -s $msa -n ${msa.baseName} 
   """
+}
+
+workflow.onComplete {
+  println workflow.success ? "Output files are saved in the folder `$params.out`" : 'Oops .. something went wrong.' 
 }
