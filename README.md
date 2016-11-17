@@ -31,14 +31,14 @@ You can run Phytoy-NF using the following commands:
 ## Command line options:
 
 ```
-	--in_dir	Path specifying one or more protein sequence datasets in fasta format to be analysed
+	--in	Path specifying one or more protein sequence datasets in fasta format to be analysed
 
-	--out_dir	Output directory
+	--out	Output directory
 	
 	
 	Example: 
 	  
-	  nextflow run nextflow run phytoy-nf --in_dir '/some/path/*.fasta' --out_dir /my/results
+	  nextflow run nextflow run phytoy-nf --in '/some/path/*.fasta' --out /my/results			
 ```
 
 
